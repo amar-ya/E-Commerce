@@ -1,15 +1,18 @@
 package org.example.ecommerce.Service;
 
+import lombok.RequiredArgsConstructor;
 import org.example.ecommerce.Model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 @Service
+@RequiredArgsConstructor
 public class UserService
 {
 
     ArrayList<User> users = new ArrayList<>();
+    private final MerchantStockService merchantStockService;
 
     public void addUser(User user){
         users.add(user);
@@ -39,5 +42,13 @@ public class UserService
         return false;
     }
 
+    public String buy(String uid, String pid, String mid){
+        String isPresent = merchantStockService.paidItem(pid, mid);
+        if(isPresent!=null){
+            return isPresent;
+        }else {
+            return null;
+        }
+    }
 
 }

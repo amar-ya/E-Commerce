@@ -1,5 +1,6 @@
 package org.example.ecommerce.Controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerce.Api.ApiResponse;
 import org.example.ecommerce.Model.Product;
@@ -18,7 +19,7 @@ public class ProductController
     private final ProductService productService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addProduct(@RequestBody Product product, Errors error){
+    public ResponseEntity<?> addProduct(@RequestBody @Valid Product product, Errors error){
         if (error.hasErrors()){
             String message = error.getFieldError().getDefaultMessage();
             return ResponseEntity.status(400).body(new ApiResponse(message));
@@ -43,16 +44,16 @@ public class ProductController
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable String id, @RequestBody Product product, Errors error){
+    public ResponseEntity<?> updateProduct(@PathVariable String id, @RequestBody @Valid Product product, Errors error){
         if(error.hasErrors()){
             String message = error.getFieldError().getDefaultMessage();
             return ResponseEntity.status(400).body(new ApiResponse(message));
         }else {
-            boolean result = productService.updateProduct(id, product);
-            if (result){
-                return ResponseEntity.status(200).body(new ApiResponse("Product updated successfully"));
+            String result = productService.updateProduct(id, product);
+            if (result != null){
+                return ResponseEntity.status(400).body(new ApiResponse(result));
             }else {
-                return ResponseEntity.status(404).body(new ApiResponse("Product not found"));
+                return ResponseEntity.status(200).body(new ApiResponse("Product updated successfully"));
             }
         }
     }

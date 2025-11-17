@@ -33,14 +33,23 @@ public class ProductService
         return products;
     }
 
-    public boolean updateProduct(String id, Product product){
-        for (int i = 0; i<products.size();i++){
+    public String updateProduct(String id, Product product){
+        ArrayList<Category> categories = categoryService.getCategories();
+        for (int i = 0 ; i < products.size(); i++){
             if(products.get(i).getId().equals(id)){
-                products.set(i, product);
-                return true;
+                for (int j = 0 ; j < categories.size()+1; j++) {
+                    if(j == categories.size()){
+                        return "invalid category id";
+                    }else {
+                        if (categories.get(j).getId().equals(product.getCategoryId())){
+                            products.set(i,product);
+                            return null;
+                        }
+                    }
+                }
             }
         }
-        return false;
+        return "invalid product id";
     }
 
     public boolean deleteProduct(String id){

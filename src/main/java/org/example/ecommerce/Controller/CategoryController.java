@@ -1,5 +1,6 @@
 package org.example.ecommerce.Controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerce.Api.ApiResponse;
 import org.example.ecommerce.Model.Category;
@@ -18,7 +19,7 @@ public class CategoryController
     private final CategoryService categoryService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addCategory(@RequestBody Category category){
+    public ResponseEntity<?> addCategory(@RequestBody @Valid Category category){
         categoryService.addCategory(category);
         return ResponseEntity.status(201).body(new ApiResponse("Category added successfully"));
     }
@@ -34,7 +35,7 @@ public class CategoryController
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable String id, @RequestBody Category category, Errors error){
+    public ResponseEntity<?> updateCategory(@PathVariable String id, @RequestBody @Valid Category category, Errors error){
         if (error.hasErrors()){
             String message = error.getFieldError().getDefaultMessage();
             return ResponseEntity.status(400).body(new ApiResponse(message));

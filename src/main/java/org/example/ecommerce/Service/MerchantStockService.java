@@ -21,53 +21,47 @@ public class MerchantStockService
     public String addMerchantStock(MerchantStock merchantStock){
         ArrayList<Product> products = productService.getProducts();
         ArrayList<Merchant> merchants = merchantService.getMerchants();
-        for (int i = 0; i < products.size()+1; i++) {
-            if (i == products.size()+1){
-                return "1";
-            }else {
-                for (int j = 0; j < merchants.size()+1; j++){
-                    if (j== merchants.size()+1){
-                        return "2";
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getId().equals(merchantStock.getProductId())) {
+                for(int j = 0; j < merchants.size()+1; j++){
+                    if(j == merchants.size()){
+                        return "invalid merchant id";
                     }else {
-                        if(products.get(i).getId().equals(merchantStock.getProductId())
-                                &&
-                                merchants.get(j).getId().equals(merchantStock.getMerchantId()
-                                )){
+                        if (merchants.get(j).getId().equals(merchantStock.getMerchantId())) {
                             merchantStocks.add(merchantStock);
+                            return null;
                         }
                     }
                 }
             }
         }
-        return "3";
+        return "invalid product id";
     }
 
     public ArrayList<MerchantStock> getMerchantStocks() {
         return merchantStocks;
     }
 
+
+
     public String updateMerchantStock(String id, MerchantStock merchantStock){
         ArrayList<Product> products = productService.getProducts();
-        ArrayList<Merchant> merchants = merchantService.getMerchants();
-        for (int i = 0; i < products.size()+1; i++) {
-            if (i == products.size()+1){
-                return "1";
-            }else {
-                for (int j = 0; j < merchants.size()+1; j++){
-                    if (j== merchants.size()+1){
-                        return "2";
-                    }else {
-                        if(products.get(i).getId().equals(merchantStock.getProductId())
-                                &&
-                                merchants.get(j).getId().equals(merchantStock.getMerchantId()
-                                )){
+
+        for (int i = 0; i < merchantStocks.size(); i++) {
+            if (merchantStocks.get(i).getMerchantId().equals(id)) {
+                for (int j = 0; j < products.size()+1; j++) {
+                    if (j == products.size()){
+                        return "invalid product id";
+                    }else{
+                        if (products.get(i).getId().equals(merchantStock.getProductId())){
                             merchantStocks.set(i,merchantStock);
+                            return null;
                         }
                     }
                 }
             }
         }
-        return "3";
+        return "invalid merchant id";
     }
 
     public boolean deleteMerchantStock(String id){
@@ -79,4 +73,19 @@ public class MerchantStockService
         }
         return false;
     }
+
+    public String paidItem(String pid, String mid){
+        for(MerchantStock ms : merchantStocks){
+            if(ms.getProductId().equals(pid)){
+                if (ms.getMerchantId().equals(mid)){
+                    ms.setStock(ms.getStock() - 1);
+                    return null;
+                }else {
+                    return "invalid merchant id";
+                }
+            }
+        }
+        return "invalid product id";
+    }
+
 }
