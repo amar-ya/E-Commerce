@@ -15,8 +15,8 @@ public class ProductService
 {
 
     private final CategoryService categoryService;
-
     ArrayList<Product> products = new ArrayList<>();
+    ArrayList reviews = new ArrayList();
 
     public boolean addProduct(Product product){
         ArrayList<Category> categories = categoryService.getCategories();
@@ -60,5 +60,39 @@ public class ProductService
             }
         }
         return false;
+    }
+
+    public Product getProductById(String id){
+        for (Product p : products){
+            if (p.getId().equals(id)){
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public void addReview(String id, String review){
+        reviews.add(id);
+        reviews.add(review);
+    }
+
+    public ArrayList reviewsOfProduct(String id){
+        ArrayList result = new ArrayList();
+        for(int i = 0 ; i < reviews.size(); i++){
+            if(reviews.get(i).equals(id)){
+                result.add(reviews.get(i+1));
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Product> getProductsUnderPrice(double price){
+        ArrayList<Product> result = new ArrayList<>();
+        for(Product p : products){
+            if(p.getPrice() <= price){
+                result.add(p);
+            }
+        }
+        return result;
     }
 }

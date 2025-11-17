@@ -69,7 +69,7 @@ public class MerchantController
 
     @PostMapping("/add/merchant-stock/{mid}/{pid}/{stock}")
     public ResponseEntity<?> addMerchantStock(@PathVariable String mid,@PathVariable String pid,@PathVariable int stock){
-        String result = merchantService.addMerchantStockItems(mid, pid, stock);
+        String result = merchantStockService.addMerchantStockItems(mid, pid, stock);
         if (result!=null){
             return ResponseEntity.status(400).body(new ApiResponse(result));
         }else {

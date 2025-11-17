@@ -9,12 +9,10 @@ import java.util.ArrayList;
 @Service
 public class MerchantService
 {
-    private final MerchantStockService merchantStockService;
+
     ArrayList<Merchant> merchants = new ArrayList<>();
 
-    public MerchantService(MerchantStockService merchantStockService) {
-        this.merchantStockService = merchantStockService;
-    }
+
 
     public void addMerchant(Merchant merchant){
         merchants.add(merchant);
@@ -44,18 +42,5 @@ public class MerchantService
         return false;
     }
 
-    public String addMerchantStockItems(String mId,String pId, int stock){
-        ArrayList<MerchantStock> ms = merchantStockService.getMerchantStocks();
-        for (MerchantStock m : ms) {
-            if(m.getMerchantId().equals(mId)){
-                if (m.getProductId().equals(pId)){
-                    m.setStock(m.getStock() + stock);
-                    return null;
-                }else {
-                    return "invalid product id";
-                }
-            }
-        }
-        return "invalid merchant id";
-    }
+
 }

@@ -78,14 +78,50 @@ public class MerchantStockService
         for(MerchantStock ms : merchantStocks){
             if(ms.getProductId().equals(pid)){
                 if (ms.getMerchantId().equals(mid)){
-                    ms.setStock(ms.getStock() - 1);
-                    return null;
+                   if (ms.getStock() < 1){
+                       return "not enough merchant stock";
+                   }else {
+                       ms.setStock(ms.getStock() - 1);
+                       return null;
+                   }
                 }else {
                     return "invalid merchant id";
                 }
             }
         }
         return "invalid product id";
+    }
+
+    public String paidItem(String pid, String mid, int amount){
+        for(MerchantStock ms : merchantStocks){
+            if(ms.getProductId().equals(pid)){
+                if (ms.getMerchantId().equals(mid)){
+                    if(ms.getStock() < amount){
+                        return "not enough merchant stock the remaining Quantity: "+ ms.getStock();
+                    }else {
+                        ms.setStock(ms.getStock() - amount);
+                        return null;
+                    }
+                }else {
+                    return "invalid merchant id";
+                }
+            }
+        }
+        return "invalid product id";
+    }
+
+    public String addMerchantStockItems(String mId,String pId, int stock){
+        for (MerchantStock m : merchantStocks) {
+            if(m.getMerchantId().equals(mId)){
+                if (m.getProductId().equals(pId)){
+                    m.setStock(m.getStock() + stock);
+                    return null;
+                }else {
+                    return "invalid product id";
+                }
+            }
+        }
+        return "invalid merchant id";
     }
 
 }

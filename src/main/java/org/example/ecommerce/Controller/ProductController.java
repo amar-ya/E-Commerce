@@ -67,4 +67,25 @@ public class ProductController
             return ResponseEntity.status(404).body(new ApiResponse("Product not found"));
         }
     }
+
+    @GetMapping("/get/review/{id}")
+    public ResponseEntity<?> getReview(@PathVariable String id) {
+        ArrayList result = productService.reviewsOfProduct(id);
+        if(result.isEmpty()){
+            return ResponseEntity.status(400).body(new ApiResponse("no one reviewed this product yet"));
+        }else {
+            return ResponseEntity.status(200).body(result);
+        }
+    }
+
+    @GetMapping("/get/within/{price}")
+    public ResponseEntity<?> getWithin(@PathVariable double price) {
+        ArrayList<Product> result = productService.getProductsUnderPrice(price);
+
+        if (result.isEmpty()){
+            return ResponseEntity.status(400).body(new ApiResponse("no products within this range of price"));
+        }else {
+            return ResponseEntity.status(200).body(result);
+        }
+    }
 }
